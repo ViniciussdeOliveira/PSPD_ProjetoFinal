@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+    networks:
+      - sparknet
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    networks:
+      - sparknet
+
+  spark-master:
+    build: .
+    container_name: spark-master
+    hostname: spark-master
+    command: /opt/bitnami/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    environment:
+      SPARK_MODE: master
+    ports:
+      - "7077:7077"    # Spark master
+      - "8080:8080"    # Spark UI
+    volumes:
+      - ./scripts:/opt/spark-apps
+    networks:
+      - sparknet
+
+  spark-worker:
+    build: .
+    hostname: spark-worker
+    depends_on:
+      - spark-master
+    command: /opt/bitnami/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    environment:
+      SPARK_MODE: worker
+    volumes:
+      - ./scripts:/opt/spark-apps
+    networks:
+      - sparknet
+
+networks:
+  sparknet:

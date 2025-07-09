@@ -1,0 +1,94 @@
+import sys
+import time
+import numpy as np
+from pyspark.sql import SparkSession
+
+def init_tabul(tam):
+    tabulIn = np.zeros((tam + 2, tam + 2), dtype=np.int8)
+    tabulOut = np.zeros((tam + 2, tam + 2), dtype=np.int8)
+
+    # Glider
+    tabulIn[1, 2] = 1
+    tabulIn[2, 3] = 1
+    tabulIn[3, 1:4] = 1
+
+    return tabulIn, tabulOut
+
+def correto(tabul, tam):
+    expected_iter = 4 * (tam - 3)
+    distance = expected_iter // 4
+
+    i = min(1 + distance, tam - 2)
+    j = min(2 + distance, tam - 2)
+
+    return (tabul[i, j+1] and
+            tabul[i+1, j+2] and
+            tabul[i+2, j] and
+            tabul[i+2, j+1] and
+            tabul[i+2, j+2])
+
+def processa_linha(data, tam):
+    idx, linhas = data
+    if idx == 0 or idx >= tam + 1:
+        return np.zeros(tam + 2, dtype=np.int8)
+    nova = np.zeros(tam + 2, dtype=np.int8)
+    for j in range(1, tam + 1):
+        vizviv = (
+            linhas[0][j-1] + linhas[0][j] + linhas[0][j+1] +
+            linhas[1][j-1] +              linhas[1][j+1] +
+            linhas[2][j-1] + linhas[2][j] + linhas[2][j+1]
+        )
+        if linhas[1][j] and (vizviv < 2 or vizviv > 3):
+            nova[j] = 0
+        elif not linhas[1][j] and vizviv == 3:
+            nova[j] = 1
+        else:
+            nova[j] = linhas[1][j]
+    return (idx, nova)
+
+def main():
+    if len(sys.argv) < 3:
+        print("Uso: spark-submit jogo_vida_spark.py POWMIN POWMAX")
+        sys.exit(1)
+
+    POWMIN = int(sys.argv[1])
+    POWMAX = int(sys.argv[2])
+
+    spark = SparkSession.builder \
+        .appName("JogoVida") \
+        .master("spark://spark-master:7077") \
+        .getOrCreate()
+    sc = spark.sparkContext
+
+    for pow in range(POWMIN, POWMAX + 1):
+        tam = 1 << pow
+        t0 = time.time()
+        tabulIn, tabulOut = init_tabul(tam)
+        t1 = time.time()
+
+        iterations = 4 * (tam - 3)
+
+        for _ in range(iterations):
+            # RDD de índices e linhas vizinhas
+            linhas_tripla = [(i, tabulIn[i-1:i+2]) for i in range(1, tam + 1)]
+            rdd = sc.parallelize(linhas_tripla)
+            result = rdd.map(lambda x: processa_linha(x, tam)).collect()
+
+            # Atualiza a nova matriz
+            for i, linha in result:
+                tabulOut[i] = linha
+            tabulIn, tabulOut = tabulOut, tabulIn
+
+        t2 = time.time()
+        if correto(tabulIn, tam):
+            print("**RESULTADO CORRETO**")
+        else:
+            print("**RESULTADO ERRADO**")
+        t3 = time.time()
+
+        print(f"tam={tam:4}; init={t1 - t0:.4f}s, comp={t2 - t1:.4f}s, check={t3 - t2:.4f}s, tot={t3 - t0:.4f}s")
+
+    spark.stop()
+
+if __name__ == "__main__":
+    main()

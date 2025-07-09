@@ -3,13 +3,13 @@
 ## 1. Clone o repositório
 
 ```bash
-git clone https://github.com/douglasffcastro/PSPD_ProjetoFinal.git
+git clone https://github.com/ViniciussdeOliveira/PSPD_ProjetoFinal.git
 ```
 
 Em seguida, navegue até o diretório do Hadoop:
 
 ```bash
-cd PSPD_ProjetoFinal/Hadoop
+cd PSPD_ProjetoFinal/versao1/hadoop
 ```
 
 ## 2. Inicie o contêiner Docker

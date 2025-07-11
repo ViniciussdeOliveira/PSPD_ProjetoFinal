@@ -1,0 +1,16 @@
+**RESULTADO CORRETO**
+tam=8; tempos: init=0.0000169, comp=0.0000360, fim=0.0000219, tot=0.0000749 
+**RESULTADO CORRETO**
+tam=16; tempos: init=0.0000050, comp=0.0004601, fim=0.0000019, tot=0.0004671 
+**RESULTADO CORRETO**
+tam=32; tempos: init=0.0000138, comp=0.0037792, fim=0.0000060, tot=0.0037990 
+**RESULTADO CORRETO**
+tam=64; tempos: init=0.0000472, comp=0.0355928, fim=0.0000322, tot=0.0356722 
+**RESULTADO CORRETO**
+tam=128; tempos: init=0.0007741, comp=0.2109530, fim=0.0000658, tot=0.2117929 
+**RESULTADO CORRETO**
+tam=256; tempos: init=0.0006750, comp=1.7101259, fim=0.0002651, tot=1.7110660 
+**RESULTADO CORRETO**
+tam=512; tempos: init=0.0026832, comp=14.1701100, fim=0.0010109, tot=14.1738040 
+**RESULTADO CORRETO**
+tam=1024; tempos: init=0.0100589, comp=118.1007659, fim=0.0041590, tot=118.1149838 

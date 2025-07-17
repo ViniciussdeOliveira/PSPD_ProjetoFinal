@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: spark-master
-        image: bitnami/spark:latest
+        image: spark-spark-master
+        imagePullPolicy: Never
         env:
         - name: SPARK_MODE
           value: master

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: bitnami/zookeeper:latest
+        image: confluentinc/cp-zookeeper:7.5.0
         env:
         - name: ALLOW_ANONYMOUS_LOGIN
           value: "yes"

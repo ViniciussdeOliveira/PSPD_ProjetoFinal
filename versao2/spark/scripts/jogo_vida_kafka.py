@@ -6,7 +6,7 @@ import numpy as np
 import json
 import time
 
-# --- Funções do jogo da vida (como no seu script) ---
+# --- Funções do jogo da vida ---
 def init_tabul(tam):
     tabulIn = np.zeros((tam + 2, tam + 2), dtype=np.int8)
     tabulOut = np.zeros((tam + 2, tam + 2), dtype=np.int8)

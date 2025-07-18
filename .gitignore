@@ -1,0 +1,8 @@
+# Arquivos de saída temporários dos testes
+testes/*.txt
+testes/saida_*.txt
+testes/analise_*.txt
+testes/funcoes_*.txt
+
+# Manter apenas os scripts de teste
+!testes/*.sh 

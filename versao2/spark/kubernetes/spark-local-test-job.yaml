@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spark-local-test-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: spark-local-test
+        image: spark-spark-master
+        imagePullPolicy: Never
+        command: ["/bin/bash"]
+        args:
+        - "-c"
+        - |
+          echo "=== TESTANDO SPARK LOCAL ==="
+          cd /opt/spark-apps
+          python3 jogo_vida_spark_local.py 4 5
+          echo "=== TESTE CONCLUÍDO ==="
+        volumeMounts:
+        - name: spark-scripts
+          mountPath: /opt/spark-apps
+      volumes:
+      - name: spark-scripts
+        configMap:
+          name: spark-scripts
+      restartPolicy: Never
+  backoffLimit: 1 

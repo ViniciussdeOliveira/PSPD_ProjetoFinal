@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spark-local-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: spark-local
+        image: spark-spark-master
+        imagePullPolicy: Never
+        command: ["/bin/bash"]
+        args:
+        - "-c"
+        - |
+          echo "=== INICIANDO JOGO DA VIDA - VERSÃO LOCAL ==="
+          cd /opt/spark-apps
+          python3 jogo_vida_local.py 4 5
+          echo "=== EXECUÇÃO FINALIZADA ==="
+        volumeMounts:
+        - name: spark-scripts
+          mountPath: /opt/spark-apps
+      volumes:
+      - name: spark-scripts
+        configMap:
+          name: spark-scripts
+      restartPolicy: Never
+  backoffLimit: 1 

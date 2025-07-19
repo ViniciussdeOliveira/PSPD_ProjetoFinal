@@ -19,6 +19,16 @@ spec:
         env:
         - name: SPARK_MODE
           value: master
+        - name: SPARK_RPC_AUTHENTICATION_ENABLED
+          value: "no"
+        - name: SPARK_RPC_ENCRYPTION_ENABLED
+          value: "no"
+        - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
+          value: "no"
+        - name: SPARK_SSL_ENABLED
+          value: "no"
         ports:
         - containerPort: 7077
-        - containerPort: 8080 
+        - containerPort: 8080
+        command: ["/opt/bitnami/scripts/spark/entrypoint.sh"]
+        args: ["/opt/bitnami/scripts/spark/run.sh"] 

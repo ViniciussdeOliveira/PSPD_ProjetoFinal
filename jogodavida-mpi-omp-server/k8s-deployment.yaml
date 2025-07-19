@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jogodavida-mpi-omp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jogodavida-mpi-omp-server
+  template:
+    metadata:
+      labels:
+        app: jogodavida-mpi-omp-server
+    spec:
+      containers:
+      - name: jogodavida-mpi-omp-server
+        image: jogodavida-mpi-omp-server:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080 

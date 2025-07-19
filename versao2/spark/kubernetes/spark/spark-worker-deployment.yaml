@@ -14,11 +14,22 @@ spec:
     spec:
       containers:
       - name: spark-worker
-        image: spark-spark-worker
+        image: spark-spark-master
+        imagePullPolicy: Never
         env:
         - name: SPARK_MODE
           value: worker
         - name: SPARK_MASTER_URL
           value: spark://spark-master-service:7077
+        - name: SPARK_RPC_AUTHENTICATION_ENABLED
+          value: "no"
+        - name: SPARK_RPC_ENCRYPTION_ENABLED
+          value: "no"
+        - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
+          value: "no"
+        - name: SPARK_SSL_ENABLED
+          value: "no"
         ports:
-        - containerPort: 8081 
+        - containerPort: 8081
+        command: ["/opt/bitnami/scripts/spark/entrypoint.sh"]
+        args: ["/opt/bitnami/scripts/spark/run.sh"] 

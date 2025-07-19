@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spark-jogo-vida-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: spark-submit
+        image: spark-spark-master
+        imagePullPolicy: Never
+        command: ["/opt/bitnami/spark/bin/spark-submit"]
+        args:
+        - "--master"
+        - "spark://spark-master-service:7077"
+        - "--deploy-mode"
+        - "client"
+        - "/opt/spark-apps/jogo_vida_spark.py"
+        - "4"
+        - "5"
+        volumeMounts:
+        - name: spark-scripts
+          mountPath: /opt/spark-apps
+      volumes:
+      - name: spark-scripts
+        configMap:
+          name: spark-scripts
+      restartPolicy: Never
+  backoffLimit: 3 

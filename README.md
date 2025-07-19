@@ -32,9 +32,7 @@ Implementação usando um cluster Spark orquestrado via Docker Compose, integrad
 * **Versão com OpenMP e MPI:**
 Implementação paralela e distribuída usando sockets tradicionais, com código adaptado a partir do jogodavida.c fornecido pelo professor.
 
-* **Orquestração e Elasticidade:**
-
-Tentativa de implementação de cluster Kubernetes local (self-hosted) para orquestração e elasticidade da aplicação, porém a configuração prática não foi concluída com sucesso.
+* **Orquestração e Elasticidade:** Implementação de cluster Kubernetes local (self-hosted) para orquestração e elasticidade da aplicação, porém a configuração prática não foi concluída com sucesso.
 
 ## **Como Executar**
 
